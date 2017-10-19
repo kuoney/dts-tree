@@ -7,7 +7,10 @@ Here is how to use it:
 3. Run:
 ```
 	cd $ROOT/linux
+	# linux:
 	find arch/arm/boot/dts/ \( -name '*\.dts' -o -name '*\.dtsi' \)  -printf "%f\n" > ../scripts/list.txt
+	# Mac:
+	find arch/arm/boot/dts/ \( -name '*\.dts' -o -name '*\.dtsi' \) -print | xargs basename > ../scripts/list.txt
 ```
 4. Run:
 ```
