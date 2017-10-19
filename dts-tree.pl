@@ -40,7 +40,8 @@ sub print_children {
 	my $depth = $_[1];
 	my @children = @{$_[2]};
 
-	print " " x ($depth * 4);
+	print "|    " x ($depth - 1);
+	print "|----";
 	print "$included\n";
 	foreach my $ch ( @children ) {
 		print_children($ch, $depth + 1, \@{$rtree{$ch}});
