@@ -54,8 +54,8 @@ sub print_children_t {
 	my $depth = $_[1];
 	my @children = @{$_[2]};
 
-	print "|    " x ($depth - 1);
-	print "|----";
+	print ">    " x ($depth - 1);
+	print ">----";
 	print "$includer\n";
 	foreach my $ch ( @children ) {
 		print_children_t($ch, $depth + 1, \@{$tree{$ch}});
@@ -106,14 +106,12 @@ foreach my $included ( keys %tree) {
 print "================INCLUDED TREE ======================\n";
 foreach my $included ( keys %tree) {
 	if (!@{$tree{$included}}) {
-		print_children_r($included, 0, \@{$rtree{$included}});
+		print_children_r($included, 1, \@{$rtree{$included}});
 	}
 }
 
 # Now do it for the reverse case.
 print "================INCLUDER TREE ======================\n";
-foreach my $includer ( keys %rtree) {
-	if (!@{$rtree{$includer}}) {
-		print_children_t($includer, 0, \@{$tree{$includer}});
-	}
+foreach my $includer ( keys %tree) {
+	print_children_t($includer, 1, \@{$tree{$includer}});
 }
