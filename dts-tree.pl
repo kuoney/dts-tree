@@ -35,7 +35,7 @@ my %tree = ();
 my %rtree = ();
 
 # Recursively print from the rtree given an array of children nodes.
-sub print_children {
+sub print_children_r {
 	my $included = $_[0];
 	my $depth = $_[1];
 	my @children = @{$_[2]};
@@ -44,7 +44,21 @@ sub print_children {
 	print "|----";
 	print "$included\n";
 	foreach my $ch ( @children ) {
-		print_children($ch, $depth + 1, \@{$rtree{$ch}});
+		print_children_r($ch, $depth + 1, \@{$rtree{$ch}});
+	}
+}
+
+# Recursively print from the tree given an array of children nodes.
+sub print_children_t {
+	my $includer = $_[0];
+	my $depth = $_[1];
+	my @children = @{$_[2]};
+
+	print "|    " x ($depth - 1);
+	print "|----";
+	print "$includer\n";
+	foreach my $ch ( @children ) {
+		print_children_t($ch, $depth + 1, \@{$tree{$ch}});
 	}
 }
 
@@ -89,8 +103,17 @@ foreach my $included ( keys %tree) {
 # Walk over the 'tree' which has a hash for every file on our list. If the file
 # is a top level file, i.e. doesn't include any files itself, then print that
 # file and its children recursively.
+print "================INCLUDED TREE ======================\n";
 foreach my $included ( keys %tree) {
 	if (!@{$tree{$included}}) {
-		print_children($included, 0, \@{$rtree{$included}});
+		print_children_r($included, 0, \@{$rtree{$included}});
+	}
+}
+
+# Now do it for the reverse case.
+print "================INCLUDER TREE ======================\n";
+foreach my $includer ( keys %rtree) {
+	if (!@{$rtree{$includer}}) {
+		print_children_t($includer, 0, \@{$tree{$includer}});
 	}
 }
